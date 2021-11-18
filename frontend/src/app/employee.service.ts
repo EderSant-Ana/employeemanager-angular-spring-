@@ -3,25 +3,28 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Employee } from './employee';
+import { environment } from './../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
 
-  private apiServerUrl = 'http://localhost/8080/api/v1';
+  private apiServerUrl = `${environment.apiUrl}/api/v1`;
 
   constructor(private http: HttpClient) { }
 
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Accept': 'application/json',
+      'Content-Type':  'application/json'
     })
   }
 
   public getEmployeesList(): Observable<Employee[]>{
     return this.http.get<Employee[]>(`${this.apiServerUrl}/employees`, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   public getEmployeeById(id: number): Observable<Employee>{
