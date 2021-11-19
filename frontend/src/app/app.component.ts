@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
 
   public employees: Employee[];
   public editEmployee: Employee;
+  public deleteEmployee: Employee;
 
   constructor(private employeeService: EmployeeService) { };
 
@@ -61,6 +62,17 @@ export class AppComponent implements OnInit {
     );
   }
 
+    public onDeleteEmployee(employeeId: number): void {
+    this.employeeService.deleteEmployee(employeeId).subscribe(
+      (response: void) => {
+        this.getEmployees();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.error.message);
+      }
+    );
+  }
+
   public onOpenModal(employee: Employee, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
@@ -75,6 +87,7 @@ export class AppComponent implements OnInit {
       button.setAttribute('data-target', '#updateEmployeeModal');
     }
     if (mode === 'delete') {
+      this.deleteEmployee = employee;
       button.setAttribute('data-target', '#deleteEmployeeModal');
     }
     container.appendChild(button);
