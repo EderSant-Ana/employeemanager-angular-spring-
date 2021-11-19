@@ -40,20 +40,15 @@ public class EmployeeService {
 	}
 	
 	public Employee updateEmployee(Employee emp) throws ResourceNotFoundException {
-		Employee employee = employeeRepo.findByEmail(emp.getEmail());
-		
-		System.out.println(employee);
-		
-		if(employee != null) {
-			employee.setName(emp.getName());
-			employee.setEmail(emp.getEmail());
-			employee.setJobTitle(emp.getJobTitle());
-			employee.setPhone(emp.getPhone());
-			employee.setImageUrl(emp.getImageUrl());
-			return employeeRepo.save(emp);			
-		}
-		throw new ResourceNotFoundException(
-				String.format("Employee with email %s is not found in the system", emp.getEmail()));		
+
+		Employee employee = employeeRepo.findById(emp.getId()).get();
+
+		employee.setName(emp.getName());
+		employee.setEmail(emp.getEmail());
+		employee.setJobTitle(emp.getJobTitle());
+		employee.setPhone(emp.getPhone());
+		employee.setImageUrl(emp.getImageUrl());
+		return employeeRepo.save(employee);			
 	}
 
 	public void deleteEmployee(Long id) throws ResourceNotFoundException {
